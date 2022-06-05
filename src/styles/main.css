@@ -1,0 +1,36 @@
+.cratehub-deps {
+  list-style: none;
+  padding: 0 !important;
+}
+.cratehub-deps > li {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border-muted, #ddd);
+}
+.cratehub-deps > li:last-child {
+  border-bottom: none;
+}
+li.cratehub-empty {
+  opacity: 0.6;
+}
+.cratehub-deps em {
+  color: darkgray;
+}
+.cratehub-header {
+  float: right;
+  margin-right: 3px;
+}
+.cratehub-header .btn {
+  position: relative;
+  margin: 3px 0;
+}
+.cratehub-deps:empty:before {
+  display: block;
+  content: 'loading';
+  padding: 10px;
+  animation: cratehub-pulse 1s infinite;
+}
+@keyframes cratehub-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
