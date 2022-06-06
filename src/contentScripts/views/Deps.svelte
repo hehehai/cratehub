@@ -7,28 +7,69 @@
   import HeaderLink from '~/components/HeaderLink.svelte';
   import { getCratesIntro, isPublicCrate } from '../fetch';
   import type { CrateIntro } from '../interface';
+  import { chunkIntoN } from '~/util';
 
   export let cargoTomlURL: string;
   export let isCargoToml: boolean;
 
-  let dependencies: CrateIntro[] = [];
   let cargoData: any;
+  let depMap: Record<string, string[]> = {};
+  let crateMap: Record<string, CrateIntro> = {};
+  let loading = true
 
   $: crateName = cargoData?.package?.name;
+  $: depMapCrates = Object.keys(depMap).reduce((acc, key) => {
+    acc[key] = depMap[key].map((create) => crateMap[create]).filter(Boolean);
+    return acc;
+  }, {} as Record<string, CrateIntro[]>);
+
+  $: console.log(depMapCrates);
 
   const getDependencies = async () => {
+    loading = true
     try {
       cargoData = await getCargoJson(isCargoToml, cargoTomlURL);
-      if (cargoData && cargoData?.dependencies) {
-        let depsName = Object.keys(cargoData.dependencies);
-        let depsIntro = await getCratesIntro(depsName);
-        if (depsIntro && depsIntro?.crates) {
-          dependencies = depsIntro.crates;
+      console.log(cargoData);
+      if (cargoData) {
+        const deps: string[] = [];
+        depMap = Object.keys(cargoData)
+          .filter((key) => key.includes('dependencies'))
+          .reduce((acc, key) => {
+            if (key.startsWith('dependencies')) {
+              acc.dependencies = [
+                ...(acc.dependencies ?? []),
+                ...Object.keys(cargoData[key]),
+              ];
+              deps.push(...acc.dependencies);
+            } else {
+              acc[key] = Object.keys(cargoData[key]);
+              deps.push(...acc[key]);
+            }
+            return acc;
+          }, {} as Record<string, string[]>);
+        console.log(depMap);
+        const depsName: string[] = Array(...new Set(deps));
+        const preRequestChunk = chunkIntoN(depsName, 10).map((item) =>
+          getCratesIntro(item),
+        );
+        const requestChunk = await Promise.all(preRequestChunk);
+        if (requestChunk) {
+          requestChunk
+            .map((item) => item?.crates)
+            .forEach((item) => {
+              item?.forEach((crate) => {
+                if (crate.name) {
+                  crateMap[crate.name] = crate;
+                }
+              });
+            });
         }
       }
     } catch (e) {
       console.log(e);
       // do something
+    } finally {
+      loading = false
     }
   };
 
@@ -37,7 +78,7 @@
 
 <div class="clearfix container-xl px-3 px-md-4 px-lg-5 mt-4">
   <!-- `z-index` due to https://github.com/npmhub/npmhub/issues/147 -->
-  <Box {dependencies} style="z-index: 1">
+  <Box {loading} dependencies={depMapCrates?.dependencies} style="z-index: 1">
     {#if !isCargoToml}
       <HeaderLink href={cargoTomlURL} label={CARGO_TOML_FILE} />
     {/if}
@@ -79,4 +120,9 @@
       {/await}
     {/if}
   </Box>
+  {#each Object.entries(depMapCrates) as [title, crates]}
+    {#if title !== 'dependencies'}
+      <Box {loading} {title} dependencies={crates} />
+    {/if}
+  {/each}
 </div>
