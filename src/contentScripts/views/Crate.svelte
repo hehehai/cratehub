@@ -65,10 +65,12 @@
         </div>
       {/if}
       {#if cargoData?.workspace?.members?.length}
-        <DetailList
-          title="WorkSpaces"
-          workspaces={cargoData?.workspace?.members}
-        />
+        <div class="mt-2">
+          <DetailList
+            title="WorkSpaces"
+            workspaces={cargoData?.workspace?.members}
+          />
+        </div>
       {/if}
     {/if}
   </div>
