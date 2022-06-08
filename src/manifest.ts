@@ -21,7 +21,7 @@ export async function getManifest() {
       },
       background: {
         page: 'background/index.html',
-        persistent: false,
+        persistent: true,
       },
       icons: {
         16: 'assets/icon-512.png',
@@ -69,6 +69,7 @@ export async function getManifest() {
       name: pkg.displayName || pkg.name,
       version: pkg.version,
       description: pkg.description,
+      persistent: true,
       action: {
         default_icon: {
           16: 'assets/icon-512.png',

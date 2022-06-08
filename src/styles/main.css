@@ -23,7 +23,6 @@ li.cratehub-empty {
   position: relative;
   margin: 3px 0;
 }
-.cratehub-deps:empty:before,
 .cratehub-loading:before {
   display: block;
   content: 'loading';

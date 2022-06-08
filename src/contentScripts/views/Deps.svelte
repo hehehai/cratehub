@@ -1,18 +1,18 @@
 <script lang="ts">
   import '~/styles';
 
-  import { CARGO_TOML_FILE, getCargoJson } from '~/logic';
+  import { CARGO_TOML_FILE } from '~/logic';
 
+  import type { CrateIntro } from '../interface';
   import Box from '~/components/Box.svelte';
   import HeaderLink from '~/components/HeaderLink.svelte';
   import { getCratesIntro, isPublicCrate } from '../fetch';
-  import type { CrateIntro } from '../interface';
   import { chunkIntoN } from '~/util';
 
   export let cargoTomlURL: string;
   export let isCargoToml: boolean;
+  export let cargoData: any;
 
-  let cargoData: any;
   let depMap: Record<string, string[]> = {};
   let crateMap: Record<string, CrateIntro> = {};
   let loading = true
@@ -24,11 +24,11 @@
   }, {} as Record<string, CrateIntro[]>);
 
   $: console.log(depMapCrates);
+  $: console.log(loading);
 
   const getDependencies = async () => {
     loading = true
     try {
-      cargoData = await getCargoJson(isCargoToml, cargoTomlURL);
       console.log(cargoData);
       if (cargoData) {
         const deps: string[] = [];
@@ -47,23 +47,25 @@
             }
             return acc;
           }, {} as Record<string, string[]>);
-        console.log(depMap);
-        const depsName: string[] = Array(...new Set(deps));
-        const preRequestChunk = chunkIntoN(depsName, 10).map((item) =>
-          getCratesIntro(item),
-        );
-        const requestChunk = await Promise.all(preRequestChunk);
-        if (requestChunk) {
-          requestChunk
-            .map((item) => item?.crates)
-            .forEach((item) => {
-              item?.forEach((crate) => {
-                if (crate.name) {
-                  crateMap[crate.name] = crate;
-                }
+        if (deps.length > 0) {
+          const depsName: string[] = Array(...new Set(deps));
+          const preRequestChunk = chunkIntoN(depsName, 10).map((item) =>
+            getCratesIntro(item),
+          );
+          const requestChunk = await Promise.all(preRequestChunk);
+          if (requestChunk) {
+            requestChunk
+              .map((item) => item?.crates)
+              .forEach((item) => {
+                item?.forEach((crate) => {
+                  if (crate.name) {
+                    crateMap[crate.name] = crate;
+                  }
+                });
               });
-            });
+          }
         }
+        console.log(deps);
       }
     } catch (e) {
       console.log(e);
