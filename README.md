@@ -9,7 +9,13 @@ cratehub also adds convenient links to:
 - [rust docs](https://docs.rs/)
 - [rust playground](https://play.rust-lang.org/)
 
-GitHub Enterprise is also supported by right-clicking on <a href="https://user-images.githubusercontent.com/12692552/172632130-3ed7d8af-db34-4b2f-b706-d6ac1f7cd506.png" target="_blank">cratehub's icon in the toolbar</a> and selecting <strong>Enable cratehub on this domain</strong>.
+GitHub Enterprise is also supported by right-clicking on cratehub's icon in the toolbar and selecting <strong>Enable cratehub on this domain</strong>.
+
+## Design
+
+Here's what cratehub looks like:
+
+![cratehub on Chrome](https://user-images.githubusercontent.com/12692552/172637024-4877982c-bcfd-4c79-a5a8-834e5463b5fa.png)
 
 ## Installation
 
