@@ -1,10 +1,13 @@
-# cratehub
+# <img src="docs/assets/createhub.png" width="45" align="left"> cratehub
 
 On every GitHub repository or folder with a `Cargo.toml` file, scroll to the bottom of the page to see a list of its npm dependencies and their descriptions.
 
 cratehub also adds convenient links to:
 
-- the **Cargo.toml** file
+- the `Cargo.toml` file
+- create info
+- add create data copy (eg: `rustfmt-nightly = "1.4.21"`)
+- `Cargo.toml` Workspaces
 - [crates.io](https://crates.io/)
 - [rust docs](https://docs.rs/)
 - [rust playground](https://play.rust-lang.org/)
@@ -19,7 +22,15 @@ Here's what cratehub looks like:
 
 ## Installation
 
-in progress 🥰
+[link-chrome]: https://chrome.google.com/webstore/detail/npmhub/kbbbjimdjbjclaebffknlabpogocablj 'Version published on Chrome Web Store'
+[link-firefox]: https://addons.mozilla.org/en-US/firefox/addon/npm-hub/ 'Version published on Mozilla Add-ons'
+[link-safari]: https://apps.apple.com/app/npmhub/id1542090429 'Version published on the Mac App Store'
+
+[<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/chrome/chrome.svg" width="48" alt="Chrome" valign="middle">][link-chrome] in progress 🥰
+
+[<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/firefox/firefox.svg" width="48" alt="Firefox" valign="middle">][link-firefox] in progress 🥰
+
+[<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/safari/safari_128x128.png" width="48" alt="Safari" valign="middle">][link-safari] !todo dev
 
 ### Development
 
