@@ -9,11 +9,10 @@
   import { sizeFormat } from '~/util/size';
 
   export let cargoData: any;
-  export let crateInfo: CrateDetailVO | undefined;
 
+  let crateInfo: CrateDetailVO | undefined;
   let loading = false;
 
-  $: console.log(crateInfo);
   $: copyVal = `${crateInfo?.crate?.name} = "${crateInfo?.crate?.max_version}"`;
   $: sizeVal = crateInfo?.versions?.at(0)?.crate_size
     ? sizeFormat(crateInfo?.versions?.at(0)?.crate_size!)
@@ -54,10 +53,8 @@
             {crateInfo?.crate?.name}
           </a>
         </h2>
-        <div>
-          <AttrList size={sizeVal} download={crateInfo?.crate?.downloads} />
-        </div>
-        <div class="mt-2">
+        <AttrList size={sizeVal} download={crateInfo?.crate?.downloads} />
+        <div class="my-2">
           <div class="mb-2 color-fg-muted text-xs">
             Add the following line to your Cargo.toml file:
           </div>
@@ -65,12 +62,10 @@
         </div>
       {/if}
       {#if cargoData?.workspace?.members?.length}
-        <div class="mt-2">
-          <DetailList
-            title="WorkSpaces"
-            workspaces={cargoData?.workspace?.members}
-          />
-        </div>
+        <DetailList
+          title="WorkSpaces"
+          workspaces={cargoData?.workspace?.members}
+        />
       {/if}
     {/if}
   </div>

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-import { onMessage } from 'webext-bridge';
 import elementReady from 'element-ready';
 import { gitHubInjection } from '~/util/github-injection';
 import Deps from './views/Deps.svelte';
@@ -13,17 +11,6 @@ interface InitProps {
 }
 
 const initDeps = async (props: InitProps) => {
-  // If this fragment exists, then the list is deferred.
-  // Adapted from https://github.com/sindresorhus/refined-github/blob/b141596/source/github-events/on-file-list-update.ts
-  const ajaxFiles = await elementReady('#files ~ include-fragment[src*="/file-list/"]');
-  if (ajaxFiles && ajaxFiles.parentNode) {
-    await new Promise(resolve => {
-      new MutationObserver(resolve).observe(ajaxFiles.parentNode!, {
-        childList: true,
-      });
-    });
-  }
-
   const target = document.querySelector('.repository-content')
   if (!target) {
     return
@@ -36,12 +23,15 @@ const initDeps = async (props: InitProps) => {
 }
 
 const initCrate = async (props: InitProps) => {
-  const target = document.querySelector('.Layout-sidebar .rgh-sticky-sidebar')
+  const target = document.querySelector('.Layout-sidebar .BorderGrid')
   if (!target) {
     return
   }
+
   new Crate({
-    props,
+    props: {
+      cargoData: props.cargoData,
+    },
     target
   });
 }
@@ -50,37 +40,47 @@ const initCrate = async (props: InitProps) => {
 const init = async () => {
   console.info('[vitesse-webext] Hello world from content script');
 
-  const isCargoTomlVal = isCargoToml();
-  const hasCargoTomlVal = hasCargoToml();
+  try {
+    // If this fragment exists, then the list is deferred.
+    // Adapted from https://github.com/sindresorhus/refined-github/blob/b141596/source/github-events/on-file-list-update.ts
+    const ajaxFiles = await elementReady('#files ~ include-fragment[src*="/file-list/"]');
+    if (ajaxFiles && ajaxFiles.parentNode) {
+      await new Promise(resolve => {
+        new MutationObserver(resolve).observe(ajaxFiles.parentNode!, {
+          childList: true,
+        });
+      });
+    }
 
-  if (!(isCargoTomlVal || hasCargoTomlVal)) {
-    return;
-  }
+    const isCargoTomlVal = isCargoToml();
+    const hasCargoTomlVal = hasCargoToml();
 
-  const cargoTomlURL = getCargoTomlURL()
-  const cargoData = await getCargoJson(isCargoTomlVal, cargoTomlURL);
+    if (!(isCargoTomlVal || hasCargoTomlVal)) {
+      return;
+    }
 
-  if (!cargoData) {
-    return;
-  }
+    const cargoTomlURL = getCargoTomlURL()
+    const cargoData = await getCargoJson(isCargoTomlVal, cargoTomlURL);
 
-  const props = {
-      isCargoToml: isCargoTomlVal,
-      cargoTomlURL: cargoTomlURL,
-      cargoData,
-  }
+    if (!cargoData) {
+      return;
+    }
 
-  if (!document.querySelector('.cratehub-crate-row')) {
-    await initCrate(props);
+    const props = {
+        isCargoToml: isCargoTomlVal,
+        cargoTomlURL: cargoTomlURL,
+        cargoData,
+    }
+
+    if (!document.querySelector('.cratehub-crate-row')) {
+      await initCrate(props);
+    }
+    if (!document.querySelector('.cratehub-header')) {
+      await initDeps(props);
+    }
+  } catch (err) {
+    console.error(err);
   }
-  if (!document.querySelector('.cratehub-header')) {
-    await initDeps(props);
-  }
-  
-   // communication example: send previous tab title from background page
-   onMessage('tab-prev', ({ data }) => {
-    console.log(`[vitesse-webext] Navigate from page "${data.title}"`);
-  });
 }
 
 gitHubInjection(init)

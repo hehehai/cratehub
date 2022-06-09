@@ -3,10 +3,10 @@
   export let download: string | number | undefined | null = undefined;
 </script>
 
-{#if size}
-  <div class="mt-2">
-    <div class="eg-repo-size">
-      <a href="/" class="Link--muted">
+<div>
+  {#if size}
+    <div class="mt-2">
+      <span class="Link--muted">
         <svg
           class="octicon octicon-database mr-2"
           aria-hidden="true"
@@ -20,15 +20,13 @@
           />
         </svg>
         <span>{size}</span>
-      </a>
+      </span>
     </div>
-  </div>
-{/if}
+  {/if}
 
-{#if download}
-  <div class="mt-2">
-    <div class="eg-repo-size">
-      <a href="/" class="Link--muted">
+  {#if download}
+    <div class="mt-2">
+      <span class="Link--muted">
         <svg
           class="octicon octicon-cloud-download mr-2"
           aria-hidden="true"
@@ -43,7 +41,7 @@
         </svg>
         <strong>{download}</strong>
         <span> downloads</span>
-      </a>
+      </span>
     </div>
-  </div>
-{/if}
+  {/if}
+</div>

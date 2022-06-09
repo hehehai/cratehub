@@ -23,13 +23,9 @@
     return acc;
   }, {} as Record<string, CrateIntro[]>);
 
-  $: console.log(depMapCrates);
-  $: console.log(loading);
-
   const getDependencies = async () => {
     loading = true
     try {
-      console.log(cargoData);
       if (cargoData) {
         const deps: string[] = [];
         depMap = Object.keys(cargoData)
@@ -65,10 +61,9 @@
               });
           }
         }
-        console.log(deps);
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
       // do something
     } finally {
       loading = false

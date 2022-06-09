@@ -26,7 +26,6 @@
         viewBox="0 0 16 16"
         version="1.1"
         width="16"
-        data-view-component="true"
         class="octicon octicon-copy js-clipboard-copy-icon d-inline-block"
       >
         <path
@@ -44,7 +43,6 @@
         viewBox="0 0 16 16"
         version="1.1"
         width="16"
-        data-view-component="true"
         class="octicon octicon-check js-clipboard-check-icon color-fg-success d-inline-block d-sm-none"
       >
         <path
