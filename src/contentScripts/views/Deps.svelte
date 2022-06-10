@@ -88,11 +88,11 @@
             label="Crates.io"
           />
           <HeaderLink
-            href="https://docs.rs/rand/latest/{crateName}"
+            href="https://docs.rs/{crateName}/latest/{crateName}"
             label="Docs.rs"
           />
           <HeaderLink
-            href="https://play.rust-lang.org/?edition=2018&code=use%20{crateName}%3B%0A%0Afn%20main()%20%7B%0A%20%20%20%20%2F%2F%20try%20using%20the%20%60rand%60%20crate%20here%0A%7D"
+            href="https://play.rust-lang.org/?edition=2018&code=use%20{crateName}%3B%0A%0Afn%20main()%20%7B%0A%20%20%20%20%2F%2F%20try%20using%20the%20%60{crateName}%60%20crate%20here%0A%7D"
             label="Rust Playground"
           />
           <details
