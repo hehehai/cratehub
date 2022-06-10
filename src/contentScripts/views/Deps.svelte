@@ -1,13 +1,12 @@
 <script lang="ts">
   import '~/styles';
 
-  import { CARGO_TOML_FILE } from '~/logic';
+  import { CARGO_TOML_FILE, getCargoDepMap } from '~/logic';
 
   import type { CrateIntro } from '../interface';
   import Box from '~/components/Box.svelte';
   import HeaderLink from '~/components/HeaderLink.svelte';
-  import { getCratesIntro, isPublicCrate } from '../fetch';
-  import { chunkIntoN } from '~/util';
+  import { getAllCreatesIntroByChunk, isPublicCrate } from '../fetch';
 
   export let cargoTomlURL: string;
   export let isCargoToml: boolean;
@@ -15,7 +14,7 @@
 
   let depMap: Record<string, string[]> = {};
   let crateMap: Record<string, CrateIntro> = {};
-  let loading = true
+  let loading = true;
 
   $: crateName = cargoData?.package?.name;
   $: depMapCrates = Object.keys(depMap).reduce((acc, key) => {
@@ -24,49 +23,32 @@
   }, {} as Record<string, CrateIntro[]>);
 
   const getDependencies = async () => {
-    loading = true
+    if (!cargoData) {
+      return;
+    }
+
+    loading = true;
     try {
-      if (cargoData) {
-        const deps: string[] = [];
-        depMap = Object.keys(cargoData)
-          .filter((key) => key.includes('dependencies'))
-          .reduce((acc, key) => {
-            if (key.startsWith('dependencies')) {
-              acc.dependencies = [
-                ...(acc.dependencies ?? []),
-                ...Object.keys(cargoData[key]),
-              ];
-              deps.push(...acc.dependencies);
-            } else {
-              acc[key] = Object.keys(cargoData[key]);
-              deps.push(...acc[key]);
-            }
-            return acc;
-          }, {} as Record<string, string[]>);
-        if (deps.length > 0) {
-          const depsName: string[] = Array(...new Set(deps));
-          const preRequestChunk = chunkIntoN(depsName, 10).map((item) =>
-            getCratesIntro(item),
-          );
-          const requestChunk = await Promise.all(preRequestChunk);
-          if (requestChunk) {
-            requestChunk
-              .map((item) => item?.crates)
-              .forEach((item) => {
-                item?.forEach((crate) => {
-                  if (crate.name) {
-                    crateMap[crate.name] = crate;
-                  }
-                });
-              });
-          }
+      const { depMap: _depMap, deps } = getCargoDepMap(cargoData);
+      depMap = _depMap;
+
+      if (deps.length > 0) {
+        const resChunk = await getAllCreatesIntroByChunk(deps);
+        if (resChunk) {
+          resChunk.forEach((item) => {
+            item?.forEach((crate) => {
+              if (crate.name) {
+                crateMap[crate.name] = crate;
+              }
+            });
+          });
         }
       }
     } catch (err) {
       console.log(err);
       // do something
     } finally {
-      loading = false
+      loading = false;
     }
   };
 

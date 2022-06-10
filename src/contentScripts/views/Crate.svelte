@@ -1,11 +1,11 @@
 <script lang="ts">
   import '~/styles';
-  import { getCrateDetail } from '../fetch';
-
+  
   import type { CrateDetailVO } from '../interface';
   import CopyInput from '~/components/CopyInput.svelte';
   import AttrList from '~/components/AttrList.svelte';
   import DetailList from '~/components/DetailList.svelte';
+  import { getCrateDetail } from '../fetch';
   import { sizeFormat } from '~/util/size';
 
   export let cargoData: any;
@@ -23,6 +23,7 @@
     if (!cargoData?.package?.name) {
       return;
     }
+
     loading = true;
     try {
       const res = await getCrateDetail(cargoData?.package?.name);

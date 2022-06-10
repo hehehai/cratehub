@@ -44,3 +44,25 @@ export async function getCargoJson(isCargoToml: boolean, cargoTomlURL?: string) 
     }
   }
 }
+
+export function getCargoDepMap(cargoData: any) {
+  const deps: string[] = [];
+
+  const depMap = Object.keys(cargoData)
+  .filter((key) => key.includes('dependencies'))
+  .reduce((acc, key) => {
+    if (key.startsWith('dependencies')) {
+      acc.dependencies = [
+        ...(acc.dependencies ?? []),
+        ...Object.keys(cargoData[key]),
+      ];
+      deps.push(...acc.dependencies);
+    } else {
+      acc[key] = Object.keys(cargoData[key]);
+      deps.push(...acc[key]);
+    }
+    return acc;
+  }, {} as Record<string, string[]>)
+
+  return { depMap, deps }
+}

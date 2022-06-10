@@ -1,3 +1,4 @@
+import { chunkIntoN } from "~/util";
 import type { CrateDepsVO, CrateDetailVO, CrateIntroVO } from "./interface";
 
 export async function getCrateDetail(name: string): Promise<CrateDetailVO | undefined | null> {
@@ -31,4 +32,18 @@ export async function getCratesIntro(names: string[]): Promise<CrateIntroVO | un
   } catch (err) {
     console.error(err);
   }
+}
+
+export async function getAllCreatesIntroByChunk(names: string[]) {
+  const depsName: string[] = [...new Set(names)];
+  if (!depsName.length) return
+
+  const preRequestChunk = chunkIntoN(depsName, 10).map((item) =>
+    getCratesIntro(item),
+  );
+  
+  const requestChunk = await Promise.all(preRequestChunk);
+  if (!requestChunk) return
+
+  return requestChunk.map((item) => item?.crates)
 }
