@@ -15,7 +15,7 @@
       <ul>
         {#each workspaces as workspace}
           <li class="Box-row d-flex flex-column flex-md-row">
-            <div class="d-flex flex-justify-start col-12 col-lg-9">
+            <div class="d-flex flex-justify-start">
               <svg
                 aria-hidden="true"
                 height="16"
