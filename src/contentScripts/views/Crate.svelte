@@ -1,6 +1,6 @@
 <script lang="ts">
   import '~/styles';
-  
+
   import type { CrateDetailVO } from '../interface';
   import CopyInput from '~/components/CopyInput.svelte';
   import AttrList from '~/components/AttrList.svelte';
@@ -9,7 +9,7 @@
   import { sizeFormat } from '~/util/size';
 
   export let cargoData: any;
-  export let repoBlobPath: string | undefined = undefined
+  export let repoBlobPath: string | undefined = undefined;
 
   let crateInfo: CrateDetailVO | undefined;
   let loading = false;
@@ -56,7 +56,7 @@
           </a>
         </h2>
         <AttrList size={sizeVal} download={crateInfo?.crate?.downloads} />
-        <div class="my-2">
+        <div class="mt-2">
           <div class="mb-2 color-fg-muted text-xs">
             Add the following line to your Cargo.toml file:
           </div>
@@ -64,11 +64,13 @@
         </div>
       {/if}
       {#if cargoData?.workspace?.members?.length}
-        <DetailList
-          title="WorkSpaces"
-          {repoBlobPath}
-          workspaces={cargoData?.workspace?.members}
-        />
+        <div class:mt-2={crateInfo?.crate}>
+          <DetailList
+            title="WorkSpaces"
+            {repoBlobPath}
+            workspaces={cargoData?.workspace?.members}
+          />
+        </div>
       {/if}
     {/if}
   </div>
