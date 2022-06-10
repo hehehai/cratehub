@@ -10,7 +10,7 @@ const browser: string = process.env.TARGET_BROWSER ?? 'chrome';
  * Stub index.html to use Vite in development
  */
 async function stubIndexHtml() {
-  const views = ['popup'];
+  const views = [];
   if (browser.includes('firefox')) {
     views.push('background');
   }

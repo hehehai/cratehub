@@ -17,7 +17,6 @@ export async function getManifest() {
       description: pkg.description,
       browser_action: {
         default_icon: 'assets/icon-512.png',
-        default_popup: 'popup/index.html',
       },
       background: {
         page: 'background/index.html',
@@ -76,7 +75,6 @@ export async function getManifest() {
           48: 'assets/icon-512.png',
           128: 'assets/icon-512.png',
         },
-        default_popup: 'popup/index.html',
       },
       background: {
         service_worker: 'background/main.ts',
