@@ -55,8 +55,11 @@ if (isDev) {
   });
 
   chokidar
-    .watch([r('package.json'), r('scripts/manifest.ts')])
+    .watch([r('package.json'), r('src/manifest.ts')])
     .on('change', () => {
       writeManifest();
     });
+} else {
+  writeManifest()
+  copyAssets()
 }

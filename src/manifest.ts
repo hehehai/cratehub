@@ -30,7 +30,6 @@ export async function getManifest() {
       permissions: [
         "https://crates.io/",
         'activeTab',
-        "contextMenus",
         'http://*/',
         'https://*/',
       ],
@@ -76,10 +75,6 @@ export async function getManifest() {
           128: 'assets/icon-512.png',
         },
       },
-      background: {
-        service_worker: 'background/main.ts',
-        type: 'module',
-      },
       icons: {
         16: 'assets/icon-512.png',
         48: 'assets/icon-512.png',
@@ -87,7 +82,6 @@ export async function getManifest() {
       },
       permissions: [
         'activeTab',
-        'contextMenus',
       ],
       content_scripts: [
         {
