@@ -9,6 +9,7 @@
   import { sizeFormat } from '~/util/size';
 
   export let cargoData: any;
+  export let repoBlobPath: string | undefined = undefined
 
   let crateInfo: CrateDetailVO | undefined;
   let loading = false;
@@ -64,6 +65,7 @@
       {#if cargoData?.workspace?.members?.length}
         <DetailList
           title="WorkSpaces"
+          {repoBlobPath}
           workspaces={cargoData?.workspace?.members}
         />
       {/if}

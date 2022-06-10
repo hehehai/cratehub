@@ -28,6 +28,11 @@ export function tomlToJson(tomlData: string) {
   return toml.parse(tomlData);
 }
 
+// https://github.com/zellij-org/zellij/blob/bg-and-fg-color-ansi/Cargo.toml
+export function getRepoBlobPath(link: string): string | undefined {
+  return (link.match(/.+blob\/.+\//) || [])[0];
+}
+
 export async function getCargoJson(isCargoToml: boolean, cargoTomlURL?: string) {
   const codeDoc = isCargoToml ? document : cargoTomlURL ? await fetchDom(cargoTomlURL) : null;
   if (codeDoc) {

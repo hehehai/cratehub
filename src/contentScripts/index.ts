@@ -2,11 +2,12 @@ import elementReady from 'element-ready';
 import { gitHubInjection } from '~/util/github-injection';
 import Deps from './views/Deps.svelte';
 import Crate from './views/Crate.svelte';
-import { getCargoJson, getCargoTomlURL, hasCargoToml, isCargoToml } from '~/logic/cargo-toml';
+import { getCargoJson, getCargoTomlURL, getRepoBlobPath, hasCargoToml, isCargoToml } from '~/logic/cargo-toml';
 
 interface InitProps {
   isCargoToml: boolean;
   cargoTomlURL?: string;
+  repoBlobPath?: string;
   cargoData?: any;
 }
 
@@ -30,6 +31,7 @@ const initCrate = async (props: InitProps) => {
 
   new Crate({
     props: {
+      repoBlobPath: props.repoBlobPath,
       cargoData: props.cargoData,
     },
     target
@@ -60,6 +62,7 @@ const init = async () => {
     }
 
     const cargoTomlURL = getCargoTomlURL()
+    const repoBlobPath = cargoTomlURL ? getRepoBlobPath(cargoTomlURL) : undefined;
     const cargoData = await getCargoJson(isCargoTomlVal, cargoTomlURL);
 
     if (!cargoData) {
@@ -69,6 +72,7 @@ const init = async () => {
     const props = {
         isCargoToml: isCargoTomlVal,
         cargoTomlURL: cargoTomlURL,
+        repoBlobPath,
         cargoData,
     }
 
