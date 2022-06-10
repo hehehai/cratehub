@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite';
 import windiCSS from 'vite-plugin-windicss';
 import { sharedConfig } from './vite.config';
-import { r } from './scripts/utils';
+import { isDev, r } from './scripts/utils';
 import windiConfig from './windi.config';
 import packageJson from './package.json';
 
 // bundling the content script using Vite
 export default defineConfig({
   ...sharedConfig,
-  mode: 'development',
   build: {
-    watch: {},
+    watch: isDev
+      ? {}
+      : undefined,
     outDir: r('dist/contentScripts'),
     cssCodeSplit: false,
     emptyOutDir: false,
