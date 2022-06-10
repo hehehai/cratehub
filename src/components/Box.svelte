@@ -32,7 +32,7 @@
     {:else}
       {#each dependencies as dep}
         <li>
-          <a href={dep?.repository}>
+          <a href={dep?.repository || `https://crates.io/crates/${dep?.name}`}>
             {dep?.name}
           </a>
           {#if dep?.description}
