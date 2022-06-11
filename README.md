@@ -18,7 +18,7 @@ GitHub Enterprise is also supported by right-clicking on cratehub's icon in the 
 
 Here's what cratehub looks like:
 
-![cratehub on Chrome](https://user-images.githubusercontent.com/12692552/172637024-4877982c-bcfd-4c79-a5a8-834e5463b5fa.png)
+![cratehub on Chrome](https://user-images.githubusercontent.com/12692552/173165981-414dc36d-a11b-4e09-b92f-7c1333f84ea0.png)
 
 ## Installation
 
@@ -62,7 +62,7 @@ And then pack files under `extension`, you can upload `extension.crx` or `extens
 
 ## See Also
 
-- [nmphub](https://github.com/npmhub/npmhub) - On every GitHub repository or folder with a package.json file, scroll to the bottom of the page to see a list of its npm dependencies and their descriptions.
+- [npmhub](https://github.com/npmhub/npmhub) - On every GitHub repository or folder with a package.json file, scroll to the bottom of the page to see a list of its npm dependencies and their descriptions.
 
 ## thx
 
