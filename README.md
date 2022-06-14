@@ -1,4 +1,4 @@
-# <img src="docs/assets/createhub.png" width="45" align="left"> cratehub
+# <img src="docs/assets/createhub.svg" width="45" align="left"> cratehub
 
 On every GitHub repository or folder with a `Cargo.toml` file, scroll to the bottom of the page to see a list of its npm dependencies and their descriptions.
 
@@ -26,7 +26,7 @@ Here's what cratehub looks like:
 [link-firefox]: https://addons.mozilla.org/addon/cratehub/ 'Version published on Mozilla Add-ons'
 [link-safari]: https://apps.apple.com/app/npmhub/id1542090429 'Version published on the Mac App Store'
 
-[<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/chrome/chrome.svg" width="48" alt="Chrome" valign="middle">][link-chrome] in progress 🥰
+[<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/chrome/chrome.svg" width="48" alt="Chrome" valign="middle">][link-chrome] [<img valign="middle" src="https://img.shields.io/chrome-web-store/v/ipcffemefdnmgnhkpdkenddfoebpejei.svg?label=%20">][link-chrome] also compatible with [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/edge/edge.svg" width="24" alt="Edge" valign="middle">][link-chrome] [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/opera/opera.svg" width="24" alt="Opera" valign="middle">][link-chrome]
 
 [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/firefox/firefox.svg" width="48" alt="Firefox" valign="middle">][link-firefox] [<img valign="middle" src="https://img.shields.io/amo/v/cratehub.svg?label=%20">][link-firefox]
 
