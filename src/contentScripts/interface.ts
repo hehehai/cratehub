@@ -166,3 +166,9 @@ export interface Meta {
   prev_page?: null;
   total?:     number;
 }
+
+export interface PlayCrateTopCrateVO {
+  name:    string;
+  version: string;
+  id:      string;
+}
