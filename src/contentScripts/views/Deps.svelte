@@ -6,10 +6,11 @@
   import type { CrateIntro } from '../interface';
   import Box from '~/components/Box.svelte';
   import HeaderLink from '~/components/HeaderLink.svelte';
-  import { getAllCreatesIntroByChunk, isPublicCrate } from '../fetch';
+  import { getAllCreatesIntroByChunk, inDayTop100 } from '../fetch';
 
-  export let cargoTomlURL: string;
+  export let isCrate: boolean = false;
   export let isCargoToml: boolean;
+  export let cargoTomlURL: string;
   export let cargoData: any;
 
   let depMap: Record<string, string[]> = {};
@@ -62,43 +63,46 @@
       <HeaderLink href={cargoTomlURL} label={CARGO_TOML_FILE} />
     {/if}
 
-    {#if crateName}
-      {#await isPublicCrate(crateName) then isPublic}
-        {#if isPublic}
-          <HeaderLink
-            href="https://crates.io/crates/{crateName}"
-            label="Crates.io"
-          />
-          <HeaderLink
-            href="https://docs.rs/{crateName}/latest/{crateName}"
-            label="Docs.rs"
-          />
+    {#if isCrate && crateName}
+      <HeaderLink
+        href="https://crates.io/crates/{crateName}"
+        label="Crates.io"
+      />
+      <HeaderLink
+        href="https://docs.rs/{crateName}/latest/{crateName}"
+        label="Docs.rs"
+      />
+
+      {#await inDayTop100(crateName) then canPlayground}
+        {#if canPlayground}
           <HeaderLink
             href="https://play.rust-lang.org/?edition=2018&code=use%20{crateName}%3B%0A%0Afn%20main()%20%7B%0A%20%20%20%20%2F%2F%20try%20using%20the%20%60{crateName}%60%20crate%20here%0A%7D"
             label="Rust Playground"
           />
-          <details
-            class="dropdown details-reset details-overlay d-inline-block BtnGroup-parent"
-          >
-            <summary class="btn btn-sm BtnGroup-item" aria-haspopup="true">
-              <div class="dropdown-caret m-0" />
-            </summary>
-
-            <ul class="dropdown-menu dropdown-menu-sw">
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="https://crates.io/crates/{crateName}/versions"
-                >
-                  Version
-                </a>
-              </li>
-            </ul>
-          </details>
         {/if}
       {/await}
+
+      <details
+        class="dropdown details-reset details-overlay d-inline-block BtnGroup-parent"
+      >
+        <summary class="btn btn-sm BtnGroup-item" aria-haspopup="true">
+          <div class="dropdown-caret m-0" />
+        </summary>
+
+        <ul class="dropdown-menu dropdown-menu-sw">
+          <li>
+            <a
+              class="dropdown-item"
+              href="https://crates.io/crates/{crateName}/versions"
+            >
+              Version
+            </a>
+          </li>
+        </ul>
+      </details>
     {/if}
   </Box>
+  
   {#each Object.entries(depMapCrates) as [title, crates]}
     {#if title !== 'dependencies'}
       <Box {loading} {title} dependencies={crates} />

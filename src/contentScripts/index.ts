@@ -3,12 +3,16 @@ import { gitHubInjection } from '~/util/github-injection';
 import Deps from './views/Deps.svelte';
 import Crate from './views/Crate.svelte';
 import { getCargoJson, getCargoTomlURL, getRepoBlobPath, hasCargoToml, isCargoToml } from '~/logic/cargo-toml';
+import { getCrateDetail } from './fetch';
+import type { CrateDetailVO } from './interface';
 
 interface InitProps {
+  isCrate: boolean;
   isCargoToml: boolean;
   cargoTomlURL?: string;
   repoBlobPath?: string;
   cargoData?: any;
+  crateData?: CrateDetailVO | null;
 }
 
 const initDeps = async (props: InitProps) => {
@@ -30,17 +34,14 @@ const initCrate = async (props: InitProps) => {
   }
 
   new Crate({
-    props: {
-      repoBlobPath: props.repoBlobPath,
-      cargoData: props.cargoData,
-    },
+    props,
     target
   });
 }
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value.
 const init = async () => {
-  console.info('[vitesse-webext] Hello world from content script');
+  console.info('[cratehub] script init');
 
   try {
     // If this fragment exists, then the list is deferred.
@@ -69,10 +70,26 @@ const init = async () => {
       return;
     }
 
-    const props = {
+    let isCrate = false
+    let crateData = null
+    if (cargoData?.package?.name) {
+      crateData = await getCrateDetail(cargoData?.package?.name);
+      if (crateData) {
+        if (crateData?.crate?.repository && cargoData?.package?.repository === crateData?.crate?.repository) {
+          isCrate = true
+        } else if (cargoData?.package?.version === crateData?.crate?.max_version) {
+          // empty repository fallback equals version
+          isCrate = true
+        }
+      }
+    }
+
+    const props: InitProps = {
+        isCrate,
         isCargoToml: isCargoTomlVal,
         cargoTomlURL: cargoTomlURL,
         repoBlobPath,
+        crateData,
         cargoData,
     }
 

@@ -1,5 +1,5 @@
+import type { CrateDepsVO, CrateDetailVO, CrateIntroVO, PlayCrateTopCrateVO } from "./interface";
 import { chunkIntoN } from "~/util";
-import type { CrateDepsVO, CrateDetailVO, CrateIntroVO } from "./interface";
 
 export async function getCrateDetail(name: string): Promise<CrateDetailVO | undefined | null> {
   try {
@@ -12,6 +12,20 @@ export async function getCrateDetail(name: string): Promise<CrateDetailVO | unde
 
 export async function isPublicCrate(name: string): Promise<boolean> {
   return !!getCrateDetail(name)
+}
+
+export async function inDayTop100(name: string): Promise<boolean> {
+  try {
+    const response = await fetch('https://play.rust-lang.org/meta/crates');
+    const data = response.status === 200 ? await response.json() : null;
+    if (!data?.crates || data?.crates?.length === 0) {
+      return false;
+    }
+    return (<PlayCrateTopCrateVO[]>(data.crates)).some(item => item.name === name);
+  } catch (err) {
+    console.error(err);
+    return false
+  }
 }
 
 export async function getCrateDeps(name: string, version: string): Promise<CrateDepsVO | undefined | null> {
