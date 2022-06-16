@@ -7,6 +7,11 @@
 
   const mergeWorkspacePath = (workspacePath: string) => {
     let path = workspacePath === '.' ? '' : workspacePath;
+    // example/* -> example/
+    if (path.endsWith("*")) {
+      return `${repoBlobPath}${path.slice(0, -1)}`;
+    }
+    // example -> example/
     if (!path.endsWith('/')) {
       path += '/';
     }
